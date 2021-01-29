@@ -52,7 +52,8 @@ class run {
 			Map map =  new HashMap();
 			for(int j = 0; j< heights[i].length; j++)
 			{
-				
+								String aa = (char)i+(char)j;
+				map.put("position_id", value)heights[i][j];
 			}
 		}
 	}
