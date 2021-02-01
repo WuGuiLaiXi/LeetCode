@@ -61,4 +61,52 @@ public class day20210201 {
         }
         return change;
     }
+
+/*
+    public int[] fairCandySwap(int[] A, int[] B) {
+        int[] change = new int[2];
+        int numa = 0, numb = 0, changea = 0;
+        for(int a : A){
+        	numa += a;
+        }
+        for(int b : B){
+        	numb += b;
+        }
+        changea = ((numa+numb)/2)-numa;
+        if(changea > 0)
+        {
+        	int flag = -1;
+            for(int a : A){
+            	if(flag == 0)
+            		break;
+            	for(int b : B){
+            		if((b - a) == changea){
+            	        change[0] = a;
+            	        change[1] = b;
+            	        flag = 0;
+            	        break;
+            		}		
+            	}
+            }
+        }
+        else
+        {
+        	int flag = -1;
+            for(int a : A){
+            	if(flag == 0)
+            		break;
+            	for(int b : B){
+            		if((a - b) == (-changea)){
+            	        change[0] = a;
+            	        change[1] = b;
+            	        flag = 0;
+            	        break;
+            		} 			
+            	}
+            }
+        	
+        }
+        return change;
+    }
+*/
 }
