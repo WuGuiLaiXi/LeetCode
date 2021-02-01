@@ -2,8 +2,7 @@ package com.leetcode.every_question;
 
 public class day20210125 {
 /*
- *在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。
- *这些字符会将方块划分为一些共边的区域。
+ 在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。
 （请注意，反斜杠字符是转义的，因此 \ 用 "\\" 表示。）。
 返回区域的数目。
 
@@ -54,60 +53,71 @@ public class day20210125 {
 输出：3
 解释：2x2 网格如下：
 
+
 提示：
 1 <= grid.length == grid[0].length <= 30
 grid[i][j] 是 '/'、'\'、或 ' '。
 
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/regions-cut-by-slashes
- * */
-	
+* */
     public int regionsBySlashes(String[] grid) {
         /*
-         * 先将n*n的矩形分成 2*n*n份，减去没有斜杠的，减去内边，加上内接矩形，即得结果
+         * 先将n*n的矩形分成 2*n*n份，减去没有斜杠的，减去内边，减去内接矩形，即得结果
          * */
-    	
+
     	int n = grid.length;
+    	//初始假设全为空，即 一个
+    	int count = 1;
         
-        //有多少个内接矩形
-        int m = 0;   
+    	//顶点数
+        int verCount = (n+1)*(n+1);  
         
-        //一共分成多少个小分块
-        int num = n*n*2;   
-        
-        //一共有多少个内边
-        int link = n*(n-1)*2;  
-        
-        //通过并查集来计算一共有多少个内接矩形
+        //通过并查集来计算一共有多少个环形
         UnionFindFor25 fa = new UnionFindFor25((n+1)*(n+1));
+        for (int i = 0; i < (n+1); i++){
+        	if (i == 0) {
+        		for (int j = 1; j < (n+1); j++) {
+        			fa.unite(j-1, j);
+        		}
+        	}
+        	else if (i == ((n+1)-1)) {
+        		fa.unite((i-1)*(n+1), i*(n+1));
+        		fa.unite((i-1)*(n+1)+n, i*(n+1)+n);
+        		for (int j = 1+(n*(n+1)); j < verCount; j++) {
+        			fa.unite(j-1, j);
+        		}
+        	}
+        	else {
+        		fa.unite((i-1)*(n+1), i*(n+1));
+        		fa.unite((i-1)*(n+1)+n, i*(n+1)+n);
+        	}
+        }
         for (int i = 0; i < n; i++) {
         	char [] a = grid[i].toCharArray();
         	for (int j = 0; j < n; j++) {
-        		if (a[j] == ' ') {
-        			//只要有一个为空，就减少个小分块
-        			num--;
-        		}
-        		/*将顶点联通，看看有多少个联通闭环，即内接矩形
+        		
+        		/*将顶点联通，看看有多少个联通闭环
         		 * 中心：i*n+j
         		 * 左上：i*n+j+i
         		 * 右上：i*n+j+i+1
         		 * 左下：i*n+j+i+1+n
         		 * 右下：i*n+j+i+1+n+1
         		 * 注：下边必须加括号
-        		*/
-        		else if (a[j] == '/') {
+        		 */
+        		if (a[j] == '/') {
         			if (fa.connected((i*n+j+i+1), (i*n+j+i+1+n)))
-        				m++;
+        				count++;
         			fa.unite((i*n+j+i+1), (i*n+j+i+1+n));
         		}
         		else if (a[j] == '\\') {
+        			if (fa.connected((i*n+j+i), (i*n+j+i+1+n+1)))
+        				count++;		
         			fa.unite((i*n+j+i), (i*n+j+i+1+n+1));        			
         		}
         	}
         }
-		System.out.println(m);
-
-        return num-link+m;
+        return count;
     }
 }
 
@@ -125,8 +135,7 @@ class UnionFindFor25 {
 	 
 	public int find(int x) {
 	    return fa[x] == x ? x : (fa[x] = find(fa[x]));
-	}
-	 
+	} 
 	public void unite(int x, int y) {
 	    x = find(x);
 	    y = find(y);
@@ -134,6 +143,7 @@ class UnionFindFor25 {
 	        return;
 	    }
 	    fa[x] = y;
+	    return;
 	}
 	public boolean connected(int x, int y) {
 		x = find(x);
