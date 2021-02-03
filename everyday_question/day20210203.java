@@ -59,6 +59,30 @@ public class day20210203 {
     	}
     	return java.util.Arrays.copyOf(res, left);
     }
+
+    /*基于 treeSet 他人版本
+     * 
+     *     public double[] medianSlidingWindow(int[] nums, int k) {
+        int n = nums.length;
+        double[] ans = new double[n-k+1];
+        Set<int[]> set = new TreeSet<>((a, b)->a[0]==b[0] ? Integer.compare(a[1], b[1]) : Integer.compare(a[0], b[0]));
+        for(int i=0; i<k; i++) set.add(new int[]{nums[i], i});        
+        for(int i=k, j=0; i<n; i++, j++){
+            ans[j] = findMid(set);
+            set.add(new int[]{nums[i], i});
+            set.remove(new int[]{nums[i-k], i-k});
+        }    
+        ans[n-k] = findMid(set);
+        return ans;
+    }
+    
+    double findMid(Set<int[]> set){
+        int mid = (set.size() - 1) / 2;
+        var it = set.iterator();
+        while(mid-->0) it.next();
+        return set.size()%2 == 0 ? ((double)it.next()[0] + it.next()[0]) / 2 : it.next()[0];
+    } 
+     * */
 }
 
 class ListNode {
