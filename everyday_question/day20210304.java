@@ -30,7 +30,7 @@ public class day20210304 {
 
     	Arrays.sort(envelopes, new Comparator<int[]>() {
     		public int compare(int[] o1, int[] o2) {
-    			if (o1[0] == o2[0]) return o2[1] - o1[1];
+    			if (o1[0] == o2[0]) return o2[1] - o1[1];          //第一位升序 第二位降序
     			return o1[0] - o2[0];
     		}
     	});
